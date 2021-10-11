@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <script src="https://kit.fontawesome.com/5f59ca6ad3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="product.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <div class="bg-container">
+        <div class="display-flex-class">
+            <div class="sidebar-class">
+                <a href="#" id="sectionHome"><i class="fas fa-home icon-class"></i></a>
+                <a href="#" id="product"><i class="fas fa-tag icon-class"></i></a>
+                <a href="#" id="deliver_track"><i class="fas fa-shipping-fast icon-class"></i></a>
+                <a href="#" id="message"><i class="far fa-envelope icon-class"></i></a>
+                <a href="#" id="setting"><i class="fas fa-cog icon-class"></i></a>
+            </div>
+        </div>
+        <div id="iconsId">
+        </div>
+        <div class="bg-container-right" id="product_contaier">
+            <div class="bg-container-row">
+                <h1 class="product-heading">
+                    Products
+                </h1>
+                <button type="button" class="button-class" data-toggle="modal" data-target="#exampleModal">
+                    Add Product
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="display-rows">
+                                <p class="create-heading">product name:</p>
+                                <input class="create-input input-width1" id="inputCreate" type="text" />
+                                <p class="create-heading mt-1">type:</p>
+                                <input class="create-input input-width2" id="inputCreate2" type="text" />
+                                <p class="create-heading mt-1">inventory:</p>
+                                <input class="create-input input-width3" id="inputCreate3" type="text" />
+                                <p class="create-heading mt-1">Price:</p>
+                                <input class="create-input input-width4" id="inputCreate4" type="text" />
+                            </div>
+                            <div class="modal-footer">
+                                <div class="button-row">
+                                    <button id="productAdd" type="button" class="button-class">Add</button>
+                                    <button id="productSave" class="button-class ml-2" onclick="onClickProductSave()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="display-rows2">
+                <input id="searchInput" type="search" placeholder="search" onkeyup="onClickSearchInput()" class="create-input2" />
+                <div class="lists-class">
+                    <a href="#" class="small-class"><i class="fas fa-cloud-download-alt icons-class"></i>Export</a>
+                    <a href="#" class="small-class"><i class="fas fa-cloud-upload-alt icons-class"></i>Import</a>
+                    <a href="#" class="small-class1">More<i class="fas fa-ellipsis-h icons-class"></i></a>
+                </div>
+            </div>
+            <div class="tabs-class">
+                <div class="btn-box">
+                    <button id="btn1" class="button-class1" onclick="onclickAllproducts()">All Products</button>
+                    <button id="btn2" class="button-class2" onclick="onclickMostpopular()">Most Popular</button>
+                </div>
+            </div>
+            <script src="homepage.js"></script>
+            <div id="mostPopular" class="icons">
+                <i class="fas fa-exclamation-circle icon-images"></i>
+            </div>
+            <div id="productDetails">
+                <div class="product-list">
+                    <p class="lists-heading1">Product</p>
+                    <p class="lists-heading">Type</p>
+                    <p class="lists-heading">inventory</p>
+                    <p class="lists-heading">Price</p>
+                </div>
+                <hr />
+                <ul class="product-class" id="productItemsContainer">
+                </ul>
+
+            </div>
+        </div>
+        <script src="product.js" href="#"></script>
+    </div>
+  </body>
+</html>
