@@ -1,54 +1,170 @@
-let homepage = document.getElementById("home")
-let productContainer = document.getElementById("product_contaier")
 let productDetails = document.getElementById("productDetails")
 let mostPopular = document.getElementById("mostPopular")
 let btn1 = document.getElementById("btn1")
 let btn2 = document.getElementById("btn2")
-let unorderlist = document.getElementById("productItemsContainer")
-let iconsIdjs = document.getElementById("iconsId")
-let productAdd = document.getElementById("productAdd")
+var selectedRow = null
+
+function onclickProductItems() {
+    let localStoragegetItems = localStorage.getItem("addProducts");
+    let parseItems = JSON.parse(localStoragegetItems);
+    if (parseItems === null) {
+        return [];
+    } else {
+        return parseItems;
+    }
+}
+
+let addProductList = onclickProductItems();
 
 
-function onClickProduct() {
+function productSave() {
+    localStorage.setItem("addProducts", JSON.stringify(addProductList));
+    swal("Saved!", "You clicked the Saved!", "success");
+}
 
-    let productInputJs = document.getElementById("inputCreate");
-    let productInputType = document.getElementById("inputCreate2");
-    let productInputInventory = document.getElementById("inputCreate3");
-    let productInputPrice = document.getElementById("inputCreate4");
+
+let addProductCount = addProductList.length;
+
+function onFormSubmit() {
+
+    let productInputJs = document.getElementById("productName");
+    let productInputType = document.getElementById("typeText");
+    let productInputInventory = document.getElementById("inventoryText");
+    let productInputPrice = document.getElementById("priceText");
 
     let inputValue = productInputJs.value;
     let typeValue = productInputType.value;
     let inventoryValue = productInputInventory.value;
     let priceValue = productInputPrice.value;
 
-    if (inputValue === "" || typeValue === "" || inventoryValue === "" || priceValue === "") {
-        alert("Enter Valid Text");
-        return;
-    }
-
-
-    productCount = productCount + 1;
-
+    addProductCount = addProductCount + 1;
+                       
     let newProduct = {
-        text: inputValue,
+        product:  inputValue,
         type: typeValue,
         inventory: inventoryValue,
         price: priceValue,
-        uniqueNo: productCount
+        productNo:addProductCount
     };
-
-    productList.push(newProduct);
-    onclickInputFunciont(newProduct);
-
-    productInputJs.value = "";
-    productInputType.value = "";
-    productInputInventory.value = "";
-    productInputPrice.value = "";
+    console.log(newProduct)
+                  
+    addProductList.push(newProduct);
+    if (validate()) {
+        swal("Done!", "You clicked the button!", "success");
+        if (selectedRow == null)
+            insertNewRecord(newProduct);
+        else
+            updateRecord(newProduct);
+        
+        resetForm();
+    }
+    
 }
 
-productAdd.onclick = function() {
-    onClickProduct();
-};
+
+for (let data of addProductList) {
+    insertNewRecord(data)
+}
+
+
+for (let dataform of addProductList){
+    updateRecord(dataform)
+}
+
+
+
+
+function insertNewRecord(data) {
+    
+    var table = document.getElementById("employeeList").getElementsByTagName('tbody')[0];
+    var newRow = table.insertRow(table.length);
+    cell1 = newRow.insertCell(0);
+    cell1.innerHTML = `<span class="custom-checkbox">
+                            <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                            <label for="checkbox1"></label>
+                        </span>`;
+    cell2 = newRow.insertCell(1);
+    cell2.innerHTML = data.product;
+    cell2.classList.add("product-list")
+    cell3 = newRow.insertCell(2);
+    cell3.innerHTML = data.type;
+    cell4 = newRow.insertCell(3);
+    cell4.innerHTML = data.inventory;
+    cell4 = newRow.insertCell(4);
+    cell4.innerHTML = data.price;
+    cell5 = newRow.insertCell(5);
+    cell5.innerHTML = `<a href="#addEmployeeModal" class="fas fa-edit icon-list" data-toggle="modal" onClick="onEdit(this)"></a>
+                       <a class="far fa-trash-alt icon-list" onClick="onDelete(this)"></a>`;
+                       
+    
+    
+    
+}
+
+function resetForm() {
+    document.getElementById("productName").value = "";
+    document.getElementById("typeText").value = "";
+    document.getElementById("inventoryText").value = "";
+    document.getElementById("priceText").value = "";
+    selectedRow = null;
+}
+
+function onEdit(td) {
+    selectedRow = td.parentElement.parentElement;
+    document.getElementById("productName").value = selectedRow.cells[1].innerHTML;
+    document.getElementById("typeText").value = selectedRow.cells[2].innerHTML;
+    document.getElementById("inventoryText").value = selectedRow.cells[3].innerHTML;
+    document.getElementById("priceText").value = selectedRow.cells[4].innerHTML;
+}
+function updateRecord(formData) {
+    selectedRow.cells[1].innerHTML = formData.product;
+    selectedRow.cells[2].innerHTML = formData.type;
+    selectedRow.cells[3].innerHTML = formData.inventory;
+    selectedRow.cells[4].innerHTML = formData.price;
+    productSave();
+    swal("Updated!", "You clicked the updated!", "success");
+
+}
+
+function onDelete(td) {
+    if (confirm('Are you sure to delete this record ?')) {
+        row = td.parentElement.parentElement;
+        document.getElementById("employeeList").deleteRow(row.rowIndex);
+        addProductList.splice(row.rowIndex);
+        productSave();
+        swal("Deleted!", "You clicked the delete!", "success");
+        resetForm();
+    }
+}
+function validate() {
+    isValid = true;
+    if (document.getElementById("productName").value == "") {
+        isValid = false;
+        document.getElementById("fullNameValidationError").classList.remove("hide");
+    } else {
+        isValid = true;
+        if (!document.getElementById("fullNameValidationError").classList.contains("hide"))
+            document.getElementById("fullNameValidationError").classList.add("hide");
+    }
+    return isValid;
+}
+
+function searchFun(){
+    let filter = document.getElementById("inputSearch").value.toUpperCase();
+    let myTable = document.getElementById("myTable")
+    let tr = myTable.getElementsByTagName('tr')
+    for(var i=0;i<tr.length;i++){
+        let td= tr[i].getElementsByTagName('td')[1]
+        if(td){
+            let textvalue = td.textContent || td.innerHTML;
+            if(textvalue.toLocaleUpperCase().indexOf(filter) > -1){
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
 
 function onclickAllproducts() {
     mostPopular.classList.remove("icons1")
@@ -66,119 +182,4 @@ function onclickMostpopular() {
     btn1.classList.remove("button-class1")
     btn1.classList.add("button-class2")
     productDetails.classList.add("product-class2")
-}
-
-function onclickProductItems() {
-    let localStoragegetItems = localStorage.getItem("productLists");
-    let parseItems = JSON.parse(localStoragegetItems);
-    if (parseItems === null) {
-        return [];
-    } else {
-        return parseItems;
-    }
-}
-
-let productList = onclickProductItems();
-
-function onClickProductSave() {
-    localStorage.setItem("productLists", JSON.stringify(productList));
-}
-
-let productCount = productList.length;
-
-function inputCheckBoxOnClick(checkIdJs, labelIdJs) {
-    let checkinputJs = document.getElementById(checkIdJs);
-    let labelOnJs = document.getElementById(labelIdJs);
-    labelOnJs.classList.toggle('checked');
-}
-
-function deleteIconId(productId) {
-    let productDoc = document.getElementById(productId);
-    unorderlist.removeChild(productDoc);
-    let deleteItems = productList.findIndex(function(eachTodo) {
-        let productUnique = "productId" + eachTodo.uniqueNo;
-        if (eachTodo === productId) {
-            return true;
-        } else {
-            return false;
-        }
-
-    });
-    productList.splice(deleteItems, 1);
-
-
-}
-
-function onclickInputFunciont(checkBoxResult) {
-    let productId = 'checkBoxResult' + checkBoxResult.uniqueNo;
-    let checkIdJs = 'checkbox' + checkBoxResult.uniqueNo;
-    let labelIdJs = 'label' + checkBoxResult.uniqueNo;
-
-
-
-    let createLiElement = document.createElement("li");
-    createLiElement.classList.add("product-item-container", "d-flex", "flex-row");
-    createLiElement.id = productId;
-    unorderlist.appendChild(createLiElement);
-
-    let inputCheckBoxElement = document.createElement("input");
-    inputCheckBoxElement.type = "checkbox";
-    inputCheckBoxElement.id = checkIdJs;
-    inputCheckBoxElement.onclick = function() {
-        inputCheckBoxOnClick(checkIdJs, labelIdJs);
-    }
-    inputCheckBoxElement.classList.add("checkbox-input");
-    createLiElement.appendChild(inputCheckBoxElement);
-
-    let inputCheckBoxContainerTextElement = document.createElement("div");
-    inputCheckBoxContainerTextElement.classList.add("label-container", "d-flex", "flex-row");
-    createLiElement.appendChild(inputCheckBoxContainerTextElement);
-
-
-    let labelContainerElement = document.createElement("label");
-    labelContainerElement.id = labelIdJs;
-    labelContainerElement.setAttribute("for", checkIdJs);
-    labelContainerElement.classList.add("checkbox-label");
-    labelContainerElement.textContent = checkBoxResult.text;
-    inputCheckBoxContainerTextElement.appendChild(labelContainerElement);
-
-
-
-    let pragraphCreate = document.createElement("p");
-    pragraphCreate.classList.add("paragraph-heading")
-    pragraphCreate.textContent = checkBoxResult.type;
-    inputCheckBoxContainerTextElement.appendChild(pragraphCreate)
-
-    let pragraphCreateInd = document.createElement("p");
-    pragraphCreateInd.classList.add("paragraph-heading2");
-    pragraphCreateInd.textContent = checkBoxResult.inventory;
-    inputCheckBoxContainerTextElement.appendChild(pragraphCreateInd)
-
-    let pragraphCreatePrice = document.createElement("p");
-    pragraphCreatePrice.classList.add("paragraph-heading3");
-    pragraphCreatePrice.textContent = "$" + checkBoxResult.price;
-    inputCheckBoxContainerTextElement.appendChild(pragraphCreatePrice)
-
-    let edit = document.createElement("button");
-    edit.onclick = "editButton()"
-    edit.classList.add("bi", "bi-pencil-square", "editbutton");
-    inputCheckBoxContainerTextElement.appendChild(edit)
-
-
-    let deleteContainerElement = document.createElement("div");
-    deleteContainerElement.classList.add("delete-icon-container");
-    inputCheckBoxContainerTextElement.appendChild(deleteContainerElement);
-
-
-    let deleteIconElement = document.createElement("i");
-    deleteIconElement.classList.add("far", "fa-trash-alt", "delete-icon");
-    deleteContainerElement.appendChild(deleteIconElement);
-    deleteIconElement.onclick = function() {
-        deleteIconId(productId);
-    }
-
-}
-
-for (let checkBoxResult of productList) {
-    onclickInputFunciont(checkBoxResult);
 }
